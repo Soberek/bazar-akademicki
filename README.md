@@ -1,10 +1,10 @@
-# 🛒 StudentShop - Wirtualny Second-Hand dla Studentów
+# 🛒 Bazar Akademicki - Bazar Akademicki
 
 Aplikacja webowa typu marketplace umożliwiająca studentom sprzedaż i zakup używanych rzeczy.
 
 ## 📋 Opis projektu
 
-StudentShop to platforma e-commerce dla studentów, gdzie można:
+Bazar Akademicki to platforma e-commerce dla studentów, gdzie można:
 
 - Przeglądać oferty używanych produktów
 - Dodawać własne ogłoszenia
