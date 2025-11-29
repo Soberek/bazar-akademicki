@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Nagłówek kategorii -->
     <div class="mb-8">
         <nav class="text-sm mb-4">
             <a href="{% url 'marketplace:listing_list' %}" class="text-gray-500 hover:text-indigo-600">Strona główna</a>
@@ -18,15 +17,13 @@
         {% endif %}
     </div>
 
-    <!-- Lista ofert -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {% for listing in listings %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group">
             <a href="{{ listing.get_absolute_url }}">
                 <div class="aspect-w-16 aspect-h-12 bg-gray-200">
                     {% if listing.main_image %}
-                    <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}" 
-                         class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
+                    <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}" class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
                     {% else %}
                     <div class="w-full h-48 flex items-center justify-center bg-gray-100">
                         <i class="fas fa-image text-4xl text-gray-400"></i>
@@ -52,13 +49,11 @@
         {% endfor %}
     </div>
 
-    <!-- Paginacja -->
     {% if listings.has_other_pages %}
     <div class="mt-8 flex justify-center">
         <nav class="flex space-x-2">
             {% if listings.has_previous %}
-            <a href="?page={{ listings.previous_page_number }}" 
-               class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+            <a href="?page={{ listings.previous_page_number }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
                 <i class="fas fa-chevron-left"></i>
             </a>
             {% endif %}
@@ -72,8 +67,7 @@
             {% endfor %}
             
             {% if listings.has_next %}
-            <a href="?page={{ listings.next_page_number }}" 
-               class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+            <a href="?page={{ listings.next_page_number }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
                 <i class="fas fa-chevron-right"></i>
             </a>
             {% endif %}

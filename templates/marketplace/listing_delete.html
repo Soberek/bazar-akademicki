@@ -17,12 +17,10 @@
         
         <form method="POST" class="flex space-x-4">
             {% csrf_token %}
-            <a href="{{ listing.get_absolute_url }}" 
-               class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-300 transition">
+            <a href="{{ listing.get_absolute_url }}" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-300 transition">
                 Anuluj
             </a>
-            <button type="submit" 
-                    class="flex-1 bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition">
+            <button type="submit" class="flex-1 bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition">
                 <i class="fas fa-trash mr-2"></i> Usuń
             </button>
         </form>
