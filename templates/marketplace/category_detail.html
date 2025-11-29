@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.name }} - StudentShop{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Nagłówek kategorii -->
+    <div class="mb-8">
+        <nav class="text-sm mb-4">
+            <a href="{% url 'marketplace:listing_list' %}" class="text-gray-500 hover:text-indigo-600">Strona główna</a>
+            <i class="fas fa-chevron-right text-gray-400 mx-2 text-xs"></i>
+            <span class="text-gray-900">{{ category.name }}</span>
+        </nav>
+        
+        <h1 class="text-3xl font-bold text-gray-900">{{ category.name }}</h1>
+        {% if category.description %}
+        <p class="mt-2 text-gray-600">{{ category.description }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Lista ofert -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for listing in listings %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group">
+            <a href="{{ listing.get_absolute_url }}">
+                <div class="aspect-w-16 aspect-h-12 bg-gray-200">
+                    {% if listing.main_image %}
+                    <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}" 
+                         class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
+                    {% else %}
+                    <div class="w-full h-48 flex items-center justify-center bg-gray-100">
+                        <i class="fas fa-image text-4xl text-gray-400"></i>
+                    </div>
+                    {% endif %}
+                </div>
+            </a>
+            <div class="p-4">
+                <a href="{{ listing.get_absolute_url }}" class="block">
+                    <h3 class="font-semibold text-lg mb-1 truncate hover:text-indigo-600">{{ listing.title }}</h3>
+                </a>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-indigo-600">{{ listing.price }} zł</span>
+                    <span class="text-xs text-gray-400">{{ listing.created_at|timesince }} temu</span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500 text-lg">Brak ofert w tej kategorii</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Paginacja -->
+    {% if listings.has_other_pages %}
+    <div class="mt-8 flex justify-center">
+        <nav class="flex space-x-2">
+            {% if listings.has_previous %}
+            <a href="?page={{ listings.previous_page_number }}" 
+               class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% endif %}
+            
+            {% for num in listings.paginator.page_range %}
+                {% if listings.number == num %}
+                <span class="px-4 py-2 bg-indigo-600 text-white rounded-lg">{{ num }}</span>
+                {% elif num > listings.number|add:'-3' and num < listings.number|add:'3' %}
+                <a href="?page={{ num }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if listings.has_next %}
+            <a href="?page={{ listings.next_page_number }}" 
+               class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
