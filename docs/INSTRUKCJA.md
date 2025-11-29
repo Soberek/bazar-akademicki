@@ -1,4 +1,4 @@
-# 📖 Instrukcja - StudentShop
+# 📖 Instrukcja - Bazar Akademicki
 
 ## 🚀 Jak uruchomić projekt
 

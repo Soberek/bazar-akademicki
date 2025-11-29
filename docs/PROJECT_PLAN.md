@@ -1,4 +1,4 @@
-# Plan projektu: Wirtualny Second-Hand dla Studentów
+# Plan projektu: Bazar Akademicki
 
 ## Przegląd
 
