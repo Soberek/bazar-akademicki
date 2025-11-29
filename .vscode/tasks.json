@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "frontend dev server",
+      "type": "shell",
+      "command": "cd frontend && npm run dev",
+      "isBackground": true
+    },
+    {
+      "label": "Django: Run Server",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python manage.py runserver",
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Django: Make Migrations",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python manage.py makemigrations",
+      "problemMatcher": []
+    },
+    {
+      "label": "Django: Migrate",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python manage.py migrate",
+      "problemMatcher": []
+    },
+    {
+      "label": "Django: Create Superuser",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python manage.py createsuperuser",
+      "problemMatcher": []
+    },
+    {
+      "label": "Django: Setup Categories",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python manage.py setup_categories",
+      "problemMatcher": []
+    },
+    {
+      "label": "Django: Collect Static",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python manage.py collectstatic --noinput",
+      "problemMatcher": []
+    }
+  ]
+}
