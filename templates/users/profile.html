@@ -1,162 +1,125 @@
-{% extends 'base.html' %} {% block title %}Mój profil - StudentShop{% endblock
-%} {% block content %}
+{% extends 'base.html' %}
+
+{% block title %}Mój profil - StudentShop{% endblock %}
+
+{% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Karta profilu -->
-    <div class="lg:col-span-1">
-      <div class="bg-white rounded-lg shadow-lg p-6">
-        <div class="text-center">
-          {% if user.avatar %}
-          <img
-            src="{{ user.avatar.url }}"
-            alt="{{ user.username }}"
-            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
-          />
-          {% else %}
-          <div
-            class="w-32 h-32 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-4"
-          >
-            <i class="fas fa-user text-5xl text-indigo-600"></i>
-          </div>
-          {% endif %}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="text-center">
+                    {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    {% else %}
+                    <div class="w-32 h-32 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user text-4xl text-indigo-600"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <h1 class="text-2xl font-bold">{{ user.get_full_name|default:user.username }}</h1>
+                    <p class="text-gray-500">@{{ user.username }}</p>
+                    
+                    {% if user.university %}
+                    <p class="mt-2 text-gray-600">
+                        <i class="fas fa-university mr-1"></i> {{ user.university }}
+                    </p>
+                    {% endif %}
+                </div>
 
-          <h2 class="text-2xl font-bold text-gray-900">
-            {{ user.get_full_name_or_username }}
-          </h2>
-          <p class="text-gray-500">@{{ user.username }}</p>
+                <hr class="my-6">
 
-          {% if user.university %}
-          <p class="mt-2 text-gray-600">
-            <i class="fas fa-university mr-1"></i> {{ user.university }}
-          </p>
-          {% endif %} {% if user.phone %}
-          <p class="mt-1 text-gray-600">
-            <i class="fas fa-phone mr-1"></i> {{ user.phone }}
-          </p>
-          {% endif %} {% if user.email %}
-          <p class="mt-1 text-gray-600">
-            <i class="fas fa-envelope mr-1"></i> {{ user.email }}
-          </p>
-          {% endif %}
+                <div class="space-y-3">
+                    {% if user.email %}
+                    <div class="flex items-center text-gray-600">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>{{ user.email }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if user.phone %}
+                    <div class="flex items-center text-gray-600">
+                        <i class="fas fa-phone w-6"></i>
+                        <span>{{ user.phone }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="flex items-center text-gray-600">
+                        <i class="fas fa-calendar w-6"></i>
+                        <span>Dołączył: {{ user.date_joined|date:"d.m.Y" }}</span>
+                    </div>
+                </div>
+
+                {% if user.bio %}
+                <hr class="my-6">
+                <div>
+                    <h3 class="font-medium mb-2">O mnie</h3>
+                    <p class="text-gray-600">{{ user.bio }}</p>
+                </div>
+                {% endif %}
+
+                <div class="mt-6">
+                    <a href="{% url 'users:profile_edit' %}" class="block w-full bg-indigo-600 text-white text-center py-2 rounded-lg hover:bg-indigo-700 transition">
+                        <i class="fas fa-edit mr-2"></i> Edytuj profil
+                    </a>
+                </div>
+            </div>
         </div>
 
-        {% if user.bio %}
-        <div class="mt-6 pt-6 border-t">
-          <h3 class="font-medium text-gray-900 mb-2">O mnie</h3>
-          <p class="text-gray-600">{{ user.bio }}</p>
-        </div>
-        {% endif %}
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">Moje oferty</h2>
+                    <a href="{% url 'marketplace:listing_create' %}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                        <i class="fas fa-plus mr-2"></i> Dodaj ofertę
+                    </a>
+                </div>
 
-        <div class="mt-6 pt-6 border-t">
-          <a
-            href="{% url 'users:profile_edit' %}"
-            class="block w-full text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
-          >
-            <i class="fas fa-edit mr-2"></i> Edytuj profil
-          </a>
+                {% if listings %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {% for listing in listings %}
+                    <div class="border rounded-lg overflow-hidden hover:shadow-md transition">
+                        <a href="{{ listing.get_absolute_url }}">
+                            {% if listing.main_image %}
+                            <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}" class="w-full h-40 object-cover">
+                            {% else %}
+                            <div class="w-full h-40 bg-gray-100 flex items-center justify-center">
+                                <i class="fas fa-image text-3xl text-gray-400"></i>
+                            </div>
+                            {% endif %}
+                        </a>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <a href="{{ listing.get_absolute_url }}" class="font-medium hover:text-indigo-600 truncate">
+                                    {{ listing.title }}
+                                </a>
+                                <span class="text-xs px-2 py-1 rounded-full {% if listing.status == 'active' %}bg-green-100 text-green-800{% elif listing.status == 'sold' %}bg-red-100 text-red-800{% elif listing.status == 'reserved' %}bg-yellow-100 text-yellow-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ listing.get_status_display }}
+                                </span>
+                            </div>
+                            <p class="text-lg font-bold text-indigo-600">{{ listing.price }} zł</p>
+                            <div class="mt-3 flex space-x-2">
+                                <a href="{% url 'marketplace:listing_edit' listing.pk %}" class="flex-1 text-center text-sm bg-gray-100 py-1 rounded hover:bg-gray-200 transition">
+                                    <i class="fas fa-edit"></i> Edytuj
+                                </a>
+                                <a href="{% url 'marketplace:listing_delete' listing.pk %}" class="flex-1 text-center text-sm bg-red-100 text-red-600 py-1 rounded hover:bg-red-200 transition">
+                                    <i class="fas fa-trash"></i> Usuń
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 mb-4">Nie masz jeszcze żadnych ofert</p>
+                    <a href="{% url 'marketplace:listing_create' %}" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">
+                        Dodaj pierwszą ofertę
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
-
-        <div class="mt-4 text-center text-sm text-gray-500">
-          <p>Dołączył/a: {{ user.created_at|date:"d.m.Y" }}</p>
-        </div>
-      </div>
     </div>
-
-    <!-- Moje oferty -->
-    <div class="lg:col-span-2">
-      <div class="bg-white rounded-lg shadow-lg p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-xl font-bold text-gray-900">
-            <i class="fas fa-box mr-2"></i> Moje oferty ({{ user_listings.count
-            }})
-          </h2>
-          <a
-            href="{% url 'marketplace:listing_create' %}"
-            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-          >
-            <i class="fas fa-plus mr-1"></i> Dodaj ofertę
-          </a>
-        </div>
-
-        {% if user_listings %}
-        <div class="space-y-4">
-          {% for listing in user_listings %}
-          <div
-            class="flex items-center border rounded-lg p-4 hover:bg-gray-50 transition"
-          >
-            <!-- Zdjęcie -->
-            <div class="flex-shrink-0 w-20 h-20 mr-4">
-              {% if listing.main_image %}
-              <img
-                src="{{ listing.main_image.url }}"
-                alt="{{ listing.title }}"
-                class="w-full h-full object-cover rounded-lg"
-              />
-              {% else %}
-              <div
-                class="w-full h-full bg-gray-100 rounded-lg flex items-center justify-center"
-              >
-                <i class="fas fa-image text-gray-400"></i>
-              </div>
-              {% endif %}
-            </div>
-
-            <!-- Szczegóły -->
-            <div class="flex-1 min-w-0">
-              <a
-                href="{{ listing.get_absolute_url }}"
-                class="text-lg font-medium text-gray-900 hover:text-indigo-600 truncate block"
-              >
-                {{ listing.title }}
-              </a>
-              <p class="text-indigo-600 font-bold">{{ listing.price }} zł</p>
-              <div class="flex items-center text-sm text-gray-500 mt-1">
-                <span
-                  class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if listing.status == 'active' %}bg-green-100 text-green-800 {% elif listing.status == 'sold' %}bg-red-100 text-red-800 {% elif listing.status == 'reserved' %}bg-yellow-100 text-yellow-800 {% else %}bg-gray-100 text-gray-800{% endif %}"
-                >
-                  {{ listing.get_status_display }}
-                </span>
-                <span class="ml-2">
-                  <i class="fas fa-eye mr-1"></i> {{ listing.views_count }}
-                </span>
-                <span class="ml-2">{{ listing.created_at|date:"d.m.Y" }}</span>
-              </div>
-            </div>
-
-            <!-- Akcje -->
-            <div class="flex-shrink-0 flex space-x-2">
-              <a
-                href="{% url 'marketplace:listing_edit' listing.pk %}"
-                class="text-gray-400 hover:text-indigo-600 p-2"
-                title="Edytuj"
-              >
-                <i class="fas fa-edit"></i>
-              </a>
-              <a
-                href="{% url 'marketplace:listing_delete' listing.pk %}"
-                class="text-gray-400 hover:text-red-600 p-2"
-                title="Usuń"
-              >
-                <i class="fas fa-trash"></i>
-              </a>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-        {% else %}
-        <div class="text-center py-12">
-          <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-          <p class="text-gray-500 text-lg">Nie masz jeszcze żadnych ofert</p>
-          <a
-            href="{% url 'marketplace:listing_create' %}"
-            class="inline-block mt-4 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition"
-          >
-            Dodaj pierwszą ofertę
-          </a>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}
