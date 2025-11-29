@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Listing, Category, ListingImage
-from .forms import ListingForm, ListingImageFormSet
+from .forms import ListingForm, ListingEditForm, ListingImageFormSet
 
 
 def listing_list(request):
@@ -110,7 +110,7 @@ def listing_edit(request, pk):
         return redirect('marketplace:listing_detail', pk=pk)
     
     if request.method == 'POST':
-        form = ListingForm(request.POST, instance=listing)
+        form = ListingEditForm(request.POST, instance=listing)
         if form.is_valid():
             form.save()
             
@@ -122,7 +122,7 @@ def listing_edit(request, pk):
             messages.success(request, 'Oferta została zaktualizowana!')
             return redirect('marketplace:listing_detail', pk=listing.pk)
     else:
-        form = ListingForm(instance=listing)
+        form = ListingEditForm(instance=listing)
     
     return render(request, 'marketplace/listing_edit.html', {
         'form': form,
