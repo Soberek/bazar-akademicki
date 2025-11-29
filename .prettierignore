@@ -1,0 +1,19 @@
+# Django templates - zawierają tagi {% %} niekompatybilne z Prettier
+templates/
+
+# Python
+*.py
+__pycache__/
+*.pyc
+.venv/
+
+# Database
+*.sqlite3
+
+# Static files
+staticfiles/
+media/
+
+# Other
+.git/
+node_modules/
