@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Breadcrumb -->
     <nav class="mb-6 text-sm">
         <ol class="flex items-center space-x-2">
             <li><a href="{% url 'marketplace:listing_list' %}" class="text-gray-500 hover:text-indigo-600">Strona główna</a></li>
@@ -18,19 +17,16 @@
     </nav>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Galeria zdjęć -->
         <div>
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                 {% if listing.images.exists %}
                 <div class="relative">
-                    <img id="main-image" src="{{ listing.images.first.image.url }}" alt="{{ listing.title }}" 
-                         class="w-full h-96 object-contain bg-gray-100">
+                    <img id="main-image" src="{{ listing.images.first.image.url }}" alt="{{ listing.title }}" class="w-full h-96 object-contain bg-gray-100">
                 </div>
                 {% if listing.images.count > 1 %}
                 <div class="flex p-4 space-x-2 overflow-x-auto">
                     {% for image in listing.images.all %}
-                    <button onclick="document.getElementById('main-image').src='{{ image.image.url }}'" 
-                            class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 hover:border-indigo-500 focus:border-indigo-500 transition">
+                    <button onclick="document.getElementById('main-image').src='{{ image.image.url }}'" class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 hover:border-indigo-500 focus:border-indigo-500 transition">
                         <img src="{{ image.image.url }}" alt="" class="w-full h-full object-cover">
                     </button>
                     {% endfor %}
@@ -44,16 +40,10 @@
             </div>
         </div>
 
-        <!-- Szczegóły oferty -->
         <div>
             <div class="bg-white rounded-lg shadow-lg p-6">
-                <!-- Status -->
                 <div class="flex items-center justify-between mb-4">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                        {% if listing.status == 'active' %}bg-green-100 text-green-800
-                        {% elif listing.status == 'sold' %}bg-red-100 text-red-800
-                        {% elif listing.status == 'reserved' %}bg-yellow-100 text-yellow-800
-                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {% if listing.status == 'active' %}bg-green-100 text-green-800{% elif listing.status == 'sold' %}bg-red-100 text-red-800{% elif listing.status == 'reserved' %}bg-yellow-100 text-yellow-800{% else %}bg-gray-100 text-gray-800{% endif %}">
                         {{ listing.get_status_display }}
                     </span>
                     <span class="text-gray-500 text-sm">
@@ -62,10 +52,8 @@
                 </div>
 
                 <h1 class="text-2xl md:text-3xl font-bold mb-4">{{ listing.title }}</h1>
-                
                 <div class="text-3xl font-bold text-indigo-600 mb-6">{{ listing.price }} zł</div>
 
-                <!-- Atrybuty -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div class="flex items-center">
                         <i class="fas fa-tag text-gray-400 mr-2"></i>
@@ -91,26 +79,23 @@
                     </div>
                 </div>
 
-                <!-- Opis -->
                 <div class="mb-6">
                     <h3 class="font-bold mb-2">Opis</h3>
                     <div class="text-gray-700 whitespace-pre-line">{{ listing.description }}</div>
                 </div>
 
-                <!-- Sprzedający -->
                 <div class="border-t pt-6">
                     <h3 class="font-bold mb-4">Sprzedający</h3>
                     <div class="flex items-center">
                         {% if listing.seller.avatar %}
-                        <img src="{{ listing.seller.avatar.url }}" alt="{{ listing.seller.username }}" 
-                             class="w-12 h-12 rounded-full mr-4">
+                        <img src="{{ listing.seller.avatar.url }}" alt="{{ listing.seller.username }}" class="w-12 h-12 rounded-full mr-4">
                         {% else %}
                         <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mr-4">
                             <i class="fas fa-user text-indigo-600"></i>
                         </div>
                         {% endif %}
                         <div>
-                            <p class="font-medium">{{ listing.seller.get_full_name_or_username }}</p>
+                            <p class="font-medium">{{ listing.seller.get_full_name|default:listing.seller.username }}</p>
                             {% if listing.seller.university %}
                             <p class="text-sm text-gray-500">{{ listing.seller.university }}</p>
                             {% endif %}
@@ -119,23 +104,19 @@
                     
                     {% if listing.seller.phone %}
                     <div class="mt-4">
-                        <a href="tel:{{ listing.seller.phone }}" 
-                           class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+                        <a href="tel:{{ listing.seller.phone }}" class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
                             <i class="fas fa-phone mr-2"></i> {{ listing.seller.phone }}
                         </a>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- Akcje właściciela -->
                 {% if user == listing.seller %}
                 <div class="border-t pt-6 mt-6 flex space-x-4">
-                    <a href="{% url 'marketplace:listing_edit' listing.pk %}" 
-                       class="flex-1 bg-indigo-600 text-white text-center py-3 rounded-lg hover:bg-indigo-700 transition">
+                    <a href="{% url 'marketplace:listing_edit' listing.pk %}" class="flex-1 bg-indigo-600 text-white text-center py-3 rounded-lg hover:bg-indigo-700 transition">
                         <i class="fas fa-edit mr-2"></i> Edytuj
                     </a>
-                    <a href="{% url 'marketplace:listing_delete' listing.pk %}" 
-                       class="flex-1 bg-red-600 text-white text-center py-3 rounded-lg hover:bg-red-700 transition">
+                    <a href="{% url 'marketplace:listing_delete' listing.pk %}" class="flex-1 bg-red-600 text-white text-center py-3 rounded-lg hover:bg-red-700 transition">
                         <i class="fas fa-trash mr-2"></i> Usuń
                     </a>
                 </div>
@@ -143,31 +124,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Podobne oferty -->
-    {% if similar_listings %}
-    <div class="mt-12">
-        <h2 class="text-2xl font-bold mb-6">Podobne oferty</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {% for item in similar_listings %}
-            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                <a href="{{ item.get_absolute_url }}">
-                    {% if item.main_image %}
-                    <img src="{{ item.main_image.url }}" alt="{{ item.title }}" class="w-full h-40 object-cover">
-                    {% else %}
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-100">
-                        <i class="fas fa-image text-3xl text-gray-400"></i>
-                    </div>
-                    {% endif %}
-                </a>
-                <div class="p-4">
-                    <a href="{{ item.get_absolute_url }}" class="font-medium hover:text-indigo-600 truncate block">{{ item.title }}</a>
-                    <p class="text-lg font-bold text-indigo-600 mt-1">{{ item.price }} zł</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
