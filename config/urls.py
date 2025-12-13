@@ -6,14 +6,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from .views import HomePageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
     
     # Homepage
-    path('', TemplateView.as_view(template_name='oscar/home.html'), name='home'),
+    path('', HomePageView.as_view(), name='home'),
     
     # Oscar URLs
     path('', include(apps.get_app_config('oscar').urls[0])),

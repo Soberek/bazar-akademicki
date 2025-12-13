@@ -91,4 +91,68 @@
         {% endif %}
     </div>
 </section>
+
+<!-- Najnowsze produkty -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-gray-900 mb-12">
+            {% trans "Najnowsze oferty" %}
+        </h2>
+        {% if products %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for product in products %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group">
+                <div class="relative overflow-hidden bg-gray-200 h-48">
+                    {% if product.primary_image %}
+                    <img src="{{ product.primary_image.image.url }}" 
+                         alt="{{ product.title }}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center bg-gray-300 text-gray-500">
+                        <i class="fas fa-image text-4xl"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2">
+                        <a href="{{ product.get_absolute_url }}" class="hover:text-indigo-600">
+                            {{ product.title }}
+                        </a>
+                    </h3>
+                    <p class="text-sm text-gray-600 line-clamp-2 mb-3">
+                        {{ product.description }}
+                    </p>
+                    <div class="flex justify-between items-end">
+                        <span class="text-lg font-bold text-indigo-600">
+                            {% if product.price %}
+                                {{ product.price }} zł
+                            {% else %}
+                                {% trans "Brak ceny" %}
+                            {% endif %}
+                        </span>
+                        <a href="{{ product.get_absolute_url }}" 
+                           class="text-indigo-600 hover:text-indigo-700 font-medium text-sm">
+                            {% trans "Szczegóły" %} <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-8 text-center">
+            <a href="{% url 'catalogue:index' %}" 
+               class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-indigo-700 transition">
+                {% trans "Przeglądaj wszystkie produkty" %} <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        {% else %}
+        <div class="bg-gray-50 rounded-lg p-12 text-center">
+            <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
+            <p class="text-gray-600 text-lg">
+                {% trans "Brak ofert. Sprawdź później!" %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

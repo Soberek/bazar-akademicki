@@ -18,13 +18,14 @@ Bazar Akademicki to platforma e-commerce dla studentów, gdzie można:
 - Python 3.13
 - Django 4.2
 - Django REST Framework
+- Django Oscar (e-commerce framework)
 - SQLite (development)
 
 **Frontend:**
 
 - HTML5
 - Tailwind CSS
-- JavaScript
+- JavaScript (vanilla)
 
 ## 🚀 Instalacja
 
@@ -38,8 +39,8 @@ Bazar Akademicki to platforma e-commerce dla studentów, gdzie można:
 1. **Sklonuj repozytorium:**
 
 ```bash
-git clone https://github.com/Soberek/ecommerce-studia.git
-cd ecommerce-studia
+git clone https://github.com/Soberek/bazar-akademicki.git
+cd bazar-akademicki
 ```
 
 2. **Utwórz wirtualne środowisko:**
@@ -57,66 +58,89 @@ source .venv/bin/activate  # Linux/macOS
 pip install -r requirements.txt
 ```
 
-4. **Wykonaj migracje:**
+4. **Wykonaj migracje bazy danych:**
 
 ```bash
 python manage.py migrate
 ```
 
-5. **Utwórz kategorie:**
+5. **Załaduj kategorie produktów:**
 
 ```bash
 python manage.py setup_categories
 ```
 
-6. **Utwórz superusera (opcjonalnie):**
+6. **Załaduj klasy produktów (typy produktów):**
+
+```bash
+python manage.py setup_product_classes
+```
+
+7. **Utwórz partnera i zapasy dla produktów:**
+
+```bash
+python manage.py setup_stock
+```
+
+8. **Utwórz konto administratora (opcjonalnie):**
 
 ```bash
 python manage.py createsuperuser
 ```
 
-7. **Uruchom serwer:**
+9. **Uruchom serwer:**
 
 ```bash
 python manage.py runserver
 ```
 
-8. **Otwórz przeglądarkę:**
-   - Aplikacja: http://127.0.0.1:8000
-   - Panel admin: http://127.0.0.1:8000/admin
+10. **Otwórz przeglądarkę:**
+
+- Aplikacja: http://127.0.0.1:8000
+- Panel administracyjny: http://127.0.0.1:8000/admin
+- Dashboard: http://127.0.0.1:8000/dashboard
 
 ## 📁 Struktura projektu
 
 ```
-ecommerce-studia/
+bazar-akademicki/
 ├── config/              # Ustawienia Django
 │   ├── settings.py
 │   ├── urls.py
+│   ├── asgi.py
 │   └── wsgi.py
 ├── users/               # Aplikacja użytkowników
-│   ├── models.py        # Model User
-│   ├── views.py         # Logowanie, rejestracja, profil
-│   └── forms.py
-├── marketplace/         # Główna aplikacja
-│   ├── models.py        # Category, Listing, ListingImage
-│   ├── views.py         # CRUD ofert, wyszukiwanie
+│   ├── models.py
+│   ├── views.py
 │   ├── forms.py
-│   ├── serializers.py   # API serializers
-│   └── api_views.py     # REST API
-├── templates/           # Szablony HTML
-├── static/              # Pliki statyczne
-├── media/               # Pliki użytkowników
-└── requirements.txt
+│   ├── management/      # Management commands
+│   │   └── commands/
+│   │       ├── setup_categories.py
+│   │       ├── setup_product_classes.py
+│   │       └── setup_stock.py
+│   └── migrations/
+├── templates/           # Szablony HTML (Oscar + custom)
+│   ├── oscar/
+│   ├── users/
+│   └── ...
+├── static/              # Pliki statyczne (CSS, JS)
+├── media/               # Wgrywane pliki użytkowników
+├── docs/                # Dokumentacja projektu
+├── manage.py
+└── requirements.txt     # Zależności Python
 ```
 
-## 🔧 API Endpoints
+## 🔗 API Endpoints
 
-| Endpoint              | Metoda | Opis             |
-| --------------------- | ------ | ---------------- |
-| `/api/listings/`      | GET    | Lista ofert      |
-| `/api/listings/`      | POST   | Dodaj ofertę     |
-| `/api/listings/<id>/` | GET    | Szczegóły oferty |
-| `/api/categories/`    | GET    | Lista kategorii  |
+| Endpoint           | Metoda    | Opis                         |
+| ------------------ | --------- | ---------------------------- |
+| `/`                | GET       | Strona główna                |
+| `/users/register`  | GET, POST | Rejestracja użytkownika      |
+| `/users/login`     | GET, POST | Logowanie                    |
+| `/users/profile`   | GET, POST | Profil użytkownika           |
+| `/api/listings/`   | GET       | Lista ofert (Oscar)          |
+| `/api/categories/` | GET       | Lista kategorii (Oscar)      |
+| `/admin/`          | GET       | Panel administracyjny Django |
 
 ## 👥 Autorzy
 

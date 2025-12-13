@@ -184,6 +184,7 @@ OSCAR_DEFAULT_CURRENCY = 'PLN'
 OSCAR_CURRENCY_FORMAT = '# zł'
 OSCAR_ALLOW_ANON_CHECKOUT = False
 OSCAR_SEND_REGISTRATION_EMAIL = False  # Disable registration emails
+OSCAR_IMAGE_FOLDER_ENABLE_SYMLINKS = False  # Disable symlinks on Windows
 
 # Email settings (console backend for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
