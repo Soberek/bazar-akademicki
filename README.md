@@ -1,4 +1,4 @@
-# 🛒 Bazar Akademicki - Bazar Akademicki
+# 🛒 Bazar Akademicki
 
 Aplikacja webowa typu marketplace umożliwiająca studentom sprzedaż i zakup używanych rzeczy.
 
@@ -38,7 +38,7 @@ Bazar Akademicki to platforma e-commerce dla studentów, gdzie można:
 1. **Sklonuj repozytorium:**
 
 ```bash
-git clone https://github.com/your-username/ecommerce-studia.git
+git clone https://github.com/Soberek/ecommerce-studia.git
 cd ecommerce-studia
 ```
 

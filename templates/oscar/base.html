@@ -1,0 +1,167 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans "Bazar Akademicki" %}{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    {% block mainstyles %}{% endblock %}
+    {% block extrastyles %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    
+    <!-- Komunikaty -->
+    {% if messages %}
+    <div class="fixed top-4 right-4 z-50 space-y-2">
+        {% for message in messages %}
+        <div class="px-4 py-3 rounded-lg shadow-lg {% if message.tags == 'success' %}bg-green-500{% elif message.tags == 'error' %}bg-red-500{% elif message.tags == 'warning' %}bg-yellow-500{% else %}bg-blue-500{% endif %} text-white">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Nawigacja -->
+    <nav class="bg-indigo-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <i class="fas fa-graduation-cap text-2xl"></i>
+                        <span class="font-bold text-xl">Bazar Akademicki</span>
+                    </a>
+                </div>
+                
+                <!-- Wyszukiwarka -->
+                <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
+                    {% block search %}
+                    <form action="{% url 'search:search' %}" method="GET" class="w-full">
+                        <div class="relative">
+                            <input type="text" name="q" placeholder="{% trans 'Szukaj produktów...' %}"
+                                class="w-full px-4 py-2 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                                value="{{ request.GET.q|default:'' }}">
+                            <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-indigo-600">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    {% endblock %}
+                </div>
+                
+                <!-- Menu użytkownika -->
+                <div class="flex items-center space-x-4">
+                    <!-- Koszyk -->
+                    <a href="{% url 'basket:summary' %}" class="relative hover:text-indigo-200">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        {% if request.basket.num_items > 0 %}
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                            {{ request.basket.num_items }}
+                        </span>
+                        {% endif %}
+                    </a>
+                    
+                    {% if user.is_authenticated %}
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 hover:text-indigo-200">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                            <span class="hidden md:inline">{{ user.get_full_name|default:user.username }}</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block z-50">
+                            <a href="{% url 'customer:profile-view' %}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50">
+                                <i class="fas fa-user mr-2"></i> {% trans "Mój profil" %}
+                            </a>
+                            <a href="{% url 'customer:order-list' %}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50">
+                                <i class="fas fa-box mr-2"></i> {% trans "Zamówienia" %}
+                            </a>
+                            <a href="{% url 'customer:wishlists-list' %}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50">
+                                <i class="fas fa-heart mr-2"></i> {% trans "Lista życzeń" %}
+                            </a>
+                            {% if user.is_staff %}
+                            <a href="{% url 'dashboard:index' %}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50">
+                                <i class="fas fa-tachometer-alt mr-2"></i> {% trans "Dashboard" %}
+                            </a>
+                            {% endif %}
+                            <hr class="my-2">
+                            <a href="{% url 'customer:logout' %}" class="block px-4 py-2 text-red-600 hover:bg-red-50">
+                                <i class="fas fa-sign-out-alt mr-2"></i> {% trans "Wyloguj" %}
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'customer:login' %}" class="hover:text-indigo-200">{% trans "Zaloguj się" %}</a>
+                    <a href="{% url 'customer:register' %}" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium hover:bg-indigo-50 transition">
+                        {% trans "Zarejestruj się" %}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Kategorie -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center space-x-6 py-3 overflow-x-auto">
+                <a href="{% url 'catalogue:index' %}" class="text-gray-600 hover:text-indigo-600 whitespace-nowrap">
+                    <i class="fas fa-th-large mr-1"></i> {% trans "Wszystkie kategorie" %}
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Główna treść -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Stopka -->
+    <footer class="bg-gray-800 text-white mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4">
+                        <i class="fas fa-graduation-cap mr-2"></i>Bazar Akademicki
+                    </h3>
+                    <p class="text-gray-400">
+                        {% trans "Studencki marketplace - kupuj i sprzedawaj wśród studentów." %}
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">{% trans "Dla kupujących" %}</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{% url 'catalogue:index' %}" class="hover:text-white">{% trans "Przeglądaj produkty" %}</a></li>
+                        <li><a href="{% url 'basket:summary' %}" class="hover:text-white">{% trans "Koszyk" %}</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">{% trans "Dla sprzedających" %}</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{% url 'dashboard:index' %}" class="hover:text-white">{% trans "Panel sprzedawcy" %}</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">{% trans "Kontakt" %}</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-envelope mr-2"></i>kontakt@bazarakademicki.pl</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Bazar Akademicki. {% trans "Wszelkie prawa zastrzeżone." %}</p>
+            </div>
+        </div>
+    </footer>
+    
+    {% block extrascripts %}{% endblock %}
+</body>
+</html>

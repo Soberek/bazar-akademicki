@@ -4,5 +4,17 @@ djangorestframework>=3.14.0
 django-filter>=23.0
 Pillow>=10.0.0
 
+# Django Oscar - E-commerce framework
+django-oscar>=3.2.2
+django-oscar-api>=3.2.0
+
+# Oscar dependencies
+purl>=1.6
+phonenumbers>=8.12.0
+django-phonenumber-field>=7.0.0
+django-tables2>=2.6.0
+django-widget-tweaks>=1.4.0
+sorl-thumbnail>=12.9.0
+
 # Development
 python-dotenv>=1.0.0
