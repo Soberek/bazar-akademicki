@@ -1,16 +1,28 @@
 """
-URL configuration for Student Second-Hand Marketplace project.
+URL configuration for Bazar Akademicki - Student Marketplace with Django Oscar.
 """
+from django.apps import apps
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('marketplace.urls')),
-    path('users/', include('users.urls')),
-    path('api/', include('marketplace.api_urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
+    
+    # Homepage
+    path('', TemplateView.as_view(template_name='oscar/home.html'), name='home'),
+    
+    # Oscar URLs
+    path('', include(apps.get_app_config('oscar').urls[0])),
+    
+    # Oscar API
+    path('api/', include('oscarapi.urls')),
+    
+    # Custom user profile URLs
+    path('profile/', include('users.urls')),
 ]
 
 # Serve media files in development

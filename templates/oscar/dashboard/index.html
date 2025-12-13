@@ -1,0 +1,138 @@
+{% extends "oscar/dashboard/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Panel sprzedawcy" %}{% endblock %}
+{% block header_title %}{% trans "Panel sprzedawcy" %}{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Stats Cards -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="p-3 bg-blue-100 rounded-full">
+                <i class="fas fa-box text-blue-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500">{% trans "Produkty" %}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ total_products|default:0 }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="p-3 bg-green-100 rounded-full">
+                <i class="fas fa-shopping-cart text-green-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500">{% trans "Zamówienia" %}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ total_orders|default:0 }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="p-3 bg-purple-100 rounded-full">
+                <i class="fas fa-users text-purple-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500">{% trans "Użytkownicy" %}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ total_users|default:0 }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="p-3 bg-yellow-100 rounded-full">
+                <i class="fas fa-chart-line text-yellow-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500">{% trans "Przychód" %}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ total_revenue|default:"0 zł" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-white rounded-lg shadow p-6 mb-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">{% trans "Szybkie akcje" %}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a href="{% url 'dashboard:catalogue-product-create' %}" 
+            class="flex items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
+            <i class="fas fa-plus-circle text-indigo-600 text-2xl mr-3"></i>
+            <div>
+                <p class="font-medium text-gray-800">{% trans "Dodaj produkt" %}</p>
+                <p class="text-sm text-gray-500">{% trans "Utwórz nowy produkt w katalogu" %}</p>
+            </div>
+        </a>
+        
+        <a href="{% url 'dashboard:catalogue-category-create' %}" 
+            class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition">
+            <i class="fas fa-folder-plus text-green-600 text-2xl mr-3"></i>
+            <div>
+                <p class="font-medium text-gray-800">{% trans "Dodaj kategorię" %}</p>
+                <p class="text-sm text-gray-500">{% trans "Utwórz nową kategorię produktów" %}</p>
+            </div>
+        </a>
+        
+        <a href="{% url 'dashboard:order-list' %}" 
+            class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">
+            <i class="fas fa-clipboard-list text-yellow-600 text-2xl mr-3"></i>
+            <div>
+                <p class="font-medium text-gray-800">{% trans "Zobacz zamówienia" %}</p>
+                <p class="text-sm text-gray-500">{% trans "Przeglądaj i zarządzaj zamówieniami" %}</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">{% trans "Ostatnie zamówienia" %}</h2>
+        {% if recent_orders %}
+        <div class="space-y-3">
+            {% for order in recent_orders %}
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div>
+                    <p class="font-medium text-gray-800">#{{ order.number }}</p>
+                    <p class="text-sm text-gray-500">{{ order.date_placed|date:"d.m.Y H:i" }}</p>
+                </div>
+                <span class="text-indigo-600 font-medium">{{ order.total_incl_tax }} zł</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-center py-8">{% trans "Brak zamówień" %}</p>
+        {% endif %}
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">{% trans "Ostatnie produkty" %}</h2>
+        {% if recent_products %}
+        <div class="space-y-3">
+            {% for product in recent_products %}
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-3">
+                    {% if product.primary_image %}
+                    <img src="{{ product.primary_image.original.url }}" class="w-full h-full object-cover rounded-lg">
+                    {% else %}
+                    <i class="fas fa-image text-gray-400"></i>
+                    {% endif %}
+                </div>
+                <div>
+                    <p class="font-medium text-gray-800">{{ product.title }}</p>
+                    <p class="text-sm text-gray-500">{{ product.date_created|date:"d.m.Y" }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-center py-8">{% trans "Brak produktów" %}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
