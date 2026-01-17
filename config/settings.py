@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_tables2',
     'sorl.thumbnail',
+    'haystack',
     
     # Oscar core apps
     'oscar.config.Shop',
