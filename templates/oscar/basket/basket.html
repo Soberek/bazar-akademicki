@@ -48,7 +48,7 @@
                         {{ line.unit_price_incl_tax|floatformat:2 }} zł / szt.
                     </p>
                     
-                    <form action="{% url 'basket:single-line' %}" method="post" class="mt-2 flex items-center space-x-2">
+                    <form action="{% url 'basket:summary' %}" method="post" class="mt-2 flex items-center space-x-2">
                         {% csrf_token %}
                         <input type="hidden" name="line_reference" value="{{ line.line_reference }}">
                         <input type="number" name="quantity" value="{{ line.quantity }}" min="1" max="99"
@@ -64,7 +64,7 @@
                     <p class="text-lg font-bold text-indigo-600">
                         {{ line.line_price_incl_tax|floatformat:2 }} zł
                     </p>
-                    <form action="{% url 'basket:single-line' %}" method="post" class="mt-2">
+                    <form action="{% url 'basket:summary' %}" method="post" class="mt-2">
                         {% csrf_token %}
                         <input type="hidden" name="line_reference" value="{{ line.line_reference }}">
                         <button type="submit" name="submit" value="delete"
