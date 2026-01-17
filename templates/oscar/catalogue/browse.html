@@ -47,9 +47,9 @@
                 </span>
             </div>
             
-            {% if products %}
+            {% if page_obj.object_list %}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for product in products %}
+                {% for product in page_obj.object_list %}
                 <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group">
                     <a href="{{ product.get_absolute_url }}">
                         <div class="aspect-square bg-gray-100 relative overflow-hidden">
